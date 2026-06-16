@@ -11,11 +11,10 @@
  * - Statistics display via Visitor
  */
 
+import java.awt.*;
+import java.util.*;
 import javax.swing.*;
 import javax.swing.tree.*;
-import java.awt.*;
-import java.awt.event.*;
-import java.util.*;
 
 public class AdminControlPanel extends JFrame {
 
@@ -151,7 +150,7 @@ public class AdminControlPanel extends JFrame {
             return;
         }
 
-        UserGroup parentGroup = setSelectedGroupOrRoot();
+        UserGroup parentGroup = getSelectedGroupOrRoot();
         User user = new User(id);
         parentGroup.add(user);
         registry.put(id, user);
@@ -184,11 +183,6 @@ public class AdminControlPanel extends JFrame {
         parentGroup.add(group);
         registry.put(id, group);
 
-        UserGroup parentGroup = getSelectedGroupOrRoot();
-        UserGroup group = new UserGroup(id);
-        parentGroup.add(group);
-        registry.put(id, group);
-
         // add to tree
         DefaultMutableTreeNode parentNode = findTreeNode(parentGroup.getId());
         if ( parentNode == null) {
@@ -204,8 +198,49 @@ public class AdminControlPanel extends JFrame {
     private void onOpenUserView() {
         DefaultMutableTreeNode node = (DefaultMutableTreeNode) tree.getLastSelectedPathComponent();
         if (node == null) {
-            return root;
+            JOptionPane.showMessageDialog(this, "Select a user in the tree.");
+            return;
         }
+
+        String id = node.getUserObject().toString();
+        UserComponent comp = registry.get(id);
+        if (!(comp instanceof User)) {
+            JOptionPane.showMessageDialog(this, "Selected node is not a user.");
+            return;
+        }
+        openUserView((User) comp);
+    }
+
+    private void onShowStats(String type) {
+        StatsVisitor visitor = new StatsVisitor();
+        root.accept(visitor);
+
+        if (type.equals("user-total")) {
+            JOptionPane.showMessageDialog(this,
+                "Total Users: " + visitor.getUserCount());
+        }
+        else if (type.equals("group-total")) {
+            JOptionPane.showMessageDialog(this,
+                "Total Groups: " + visitor.getGroupCount());
+        }
+        else if (type.equals("message-total")) {
+            JOptionPane.showMessageDialog(this,
+                "Total Messages: " + visitor.getTweetCount());
+        }
+        else if (type.equals("positive-percent")) {
+            JOptionPane.showMessageDialog(this,
+                "Positive Percentage: " + visitor.getPositivePercentage() + "%");
+        }
+        else {
+            JOptionPane.showMessageDialog(this,
+                "Unknown stats type: " + type);
+        }
+    }
+
+
+    private UserGroup getSelectedGroupOrRoot() {
+        DefaultMutableTreeNode node = (DefaultMutableTreeNode) tree.getLastSelectedPathComponent();
+        if (node == null) return root;
 
         String id = node.getUserObject().toString();
         UserComponent comp = registry.get(id);
@@ -219,8 +254,8 @@ public class AdminControlPanel extends JFrame {
         return findTreeNodRecursive(rootNode, id);
     }
 
-    private DefaultMutableTreeNode findTreeNodRecursive(DefaultMutableTreeNode currrent, String id) {
-        if current.getUserObject().toString().equals(id) {
+    private DefaultMutableTreeNode findTreeNodRecursive(DefaultMutableTreeNode current, String id) {
+        if (current.getUserObject().toString().equals(id)){
             return current;
         }
         for (int i = 0; i < current.getChildCount(); i++) {

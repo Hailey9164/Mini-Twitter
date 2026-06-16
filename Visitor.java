@@ -1,8 +1,8 @@
 /* Hailey Campbell 
  * CSC 3560
  * 6/15/2026
- * Class: Visitor
- * This class is a visitor in the visitor design pattern, representing an object that can visit other objects.
+ * Interface: Visitor
+ * This interface is a visitor in the visitor design pattern, representing an object that can visit other objects.
  */
 
 public interface Visitor {

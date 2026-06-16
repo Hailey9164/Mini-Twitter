@@ -1,8 +1,8 @@
 /* Hailey Campbell 
  * CSC 3560
  * 6/15/2026
- * Class: UserComponent
- * This class is a abstract class for User (leaf) and UserGroup (composite). It uses 
+ * Abstract class: UserComponent
+ * This abstract class is a abstract class for User (leaf) and UserGroup (composite). It uses 
  * the composite design pattern to allow for a hierarchical structure of users and 
  * user groups.
  */
