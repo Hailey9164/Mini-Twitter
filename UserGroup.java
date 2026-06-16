@@ -12,11 +12,15 @@ public class UserGroup extends UserComponent {
     // List of child components
     private final List<UserComponent> children = new ArrayList<>();
 
+    // The ID of the user group
+    private String id;
+
     /* Method: UserGroup
      * This method is used to initialize the user group with an ID using the parent class constructor.
      */
     public UserGroup(String id) {
         super(id);
+        this.id = id;
     }
 
     /* Method: add
@@ -44,5 +48,13 @@ public class UserGroup extends UserComponent {
         for (UserComponent child : children) {
             child.accept(visitor);
         }
+    }
+
+    /* Method: toString
+     * This method is used to return the ID of the user group.
+     */
+    @Override
+    public String toString() {
+        return id;
     }
 }

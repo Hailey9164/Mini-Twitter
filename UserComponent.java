@@ -15,7 +15,6 @@ public abstract class UserComponent {
      * This method is used to initialize the unique ID of the user or group.
      * Constructor to initialize the unique ID
      */
-
     public UserComponent(String id) {
         this.id = id;
     }   

@@ -7,6 +7,10 @@
  */
 
 public class Driver {
+    /*
+     * Method: main
+     * The main entry point for the application.
+     */
     public static void main(String[] args) {
         javax.swing.SwingUtilities.invokeLater(() -> {
             AdminControlPanel.instance().setVisible(true);

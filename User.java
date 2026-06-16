@@ -27,6 +27,7 @@ public class User extends UserComponent implements Subject, Observer {
      */
     public User(String id){
         super(id);
+        this.id = id;
     }
 
     /* Method: follow
@@ -131,5 +132,14 @@ public class User extends UserComponent implements Subject, Observer {
     @Override
     public void accept(Visitor visitor) {
         visitor.visitUser(this);
+    }
+
+    /*
+     * Method: toString
+     * Returns the string representation of the user.
+     */
+    @Override
+    public String toString() {
+        return id;
     }
 }

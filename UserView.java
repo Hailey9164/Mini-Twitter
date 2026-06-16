@@ -12,8 +12,10 @@ import java.awt.*;
 import javax.swing.*;
 
 public class UserView extends JFrame implements Observer {
+    // The user whose information is being displayed
     private final User user;
 
+    // The model for the following list
     private final DefaultListModel<String> followingModel = new DefaultListModel<>();
     private final DefaultListModel<String> feedModel = new DefaultListModel<>();
 
@@ -27,6 +29,10 @@ public class UserView extends JFrame implements Observer {
     private JButton followButton;
     private JButton postButton;
 
+    /*
+     * Method: UserView
+     * Constructor to initialize the user view.
+     */
     public UserView(User user) {
         super("User View: " + user.getId());
         this.user = user;
@@ -41,6 +47,11 @@ public class UserView extends JFrame implements Observer {
         
         refresh();
     }
+
+    /*
+     * Method: buildUI
+     * Builds the user interface for the view.
+     */
     private void buildUI() {
         setLayout(new BorderLayout());
 
@@ -85,53 +96,86 @@ public class UserView extends JFrame implements Observer {
         hookLListeners();
     }
 
+    /*
+     * Method: hookLListeners
+     * Hooks up the listeners for the buttons.
+     */
     private void hookLListeners() {
         followButton.addActionListener(e -> onFollowUser());
         postButton.addActionListener(e -> { onPostTweet(); });
     }
 
+    /*
+     * Method: onFollowUser
+     * Handles the follow user button click event.
+     */
     private void onFollowUser() {
+        // Clear the text field
         String targetId = followUserField.getText().trim();
+        // Check if the user ID is empty
         if (targetId.isEmpty()) {
             JOptionPane.showMessageDialog(this, "User ID cannot be empty.");
             return;
         }
 
+        // Find the user component with the given ID
         UserComponent comp = AdminControlPanel.instance().find(targetId);
         if (!(comp instanceof User target)) {
             JOptionPane.showMessageDialog(this, "User not found.");
             return;
         }
 
+        // Follow the target user
         user.follow(target);
         followUserField.setText("");
         refresh();
     }
 
+    /*
+     * Method: onPostTweet
+     * Handles the post tweet button click event.
+     */ 
     private void onPostTweet() {
+        // Clear the text field
         String msg = tweetField.getText().trim();
+        // Check if the tweet message is empty
         if (msg.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Tweet message cannot be empty.");
             return;
         }
+
+        // Post the tweet
         user.postTweet(msg);
         tweetField.setText("");
         refresh();
     }
 
+    /*
+     * Method: refresh
+     * Refreshes the view with the latest data.
+     */
     private void refresh() {
+        // Clear the following list
         followingModel.clear();
 
+        // Clear the newsfeed list
         for (User u : user.getFollowings()) {
             followingModel.addElement(u.getId());
         }
 
+        // Add the following users to the list
         feedModel.clear();
+
+        // Add the newsfeed messages to the list    
         for (String msg : user.getNewsFeed()) {
             feedModel.addElement(msg);
         }
     }
 
+    /*
+     * Method: update
+     * Updates the view with the latest data.
+     */
     @Override
     public void update(Subject subject, Object arg) {
         refresh();
