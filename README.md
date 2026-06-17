@@ -98,13 +98,13 @@ Represents a group that can contain both users and other groups. This class impl
 An interface defining the attach, detach, and notify operations for observers.
 
 ### Observer  
-An interface implemented by any class that needs to receive updates — including User and UserView.
+An interface implemented by any class that needs to receive updates, including User and UserView.
 
 ### Visitor  
 An interface defining operations for visiting users and groups.
 
 ### StatsVisitor  
-Implements the Visitor interface to compute system-wide statistics such as total users, total groups, total tweets, and the percentage of positive messages. It traverses the entire Composite structure starting from the root group.
+Implements the Visitor interface to compute system-wide statistics such as total users, total groups, total tweets, and the percentage of positive messages. It traverses the entire Composite structure, starting from the root group.
 
 ### Driver 
 Contains the main method and starts the program.
@@ -116,16 +116,12 @@ Groups override getChildren() to return their list, enabling indentation and fol
 
 ### 2. Observer for Live Updates
 Each user maintains:
-
-A list of followers (User observers)
-
-A list of GUI observers (UserView windows)
+- A list of followers (User observers)
+- A list of GUI observers (UserView windows)
 
 This ensures:
-
-Tweets instantly propagate to followers
-
-All open windows stay in sync
+- Tweets instantly propagate to followers
+- All open windows stay in sync
 
 ### 3. Visitor for Statistics
 Instead of scattering counters across the codebase, the Visitor pattern centralizes all analytics in StatsVisitor.
@@ -133,3 +129,10 @@ Instead of scattering counters across the codebase, the Visitor pattern centrali
 ### 4. Singleton for Admin Panel
 Only one Admin Control Panel should exist.
 The Singleton pattern prevents accidental duplicates.
+
+## Author
+Hailey Campbell  
+
+CSC 3560 – Object‑Oriented Programming
+
+June 2026
