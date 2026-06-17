@@ -4,6 +4,8 @@
  * Class: User
  * This class is a leaf in the composite design pattern, representing an 
  * individual user. It is a Subject and an Observer for the observer pattern. 
+ * 
+ * Design Pattern: Composite, Visitor, Observer
  */
 
 import java.util.ArrayList;

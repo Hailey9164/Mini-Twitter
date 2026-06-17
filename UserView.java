@@ -6,6 +6,8 @@
  * Manages:
  * - displaying user details
  * - editing user information
+ * 
+ * Design Pattern: Observer
  */
 
 import java.awt.*;
@@ -43,9 +45,10 @@ public class UserView extends JFrame implements Observer {
 
         buildUI();
                 
-        user.attachGUI(this);
-        
-        refresh();
+        SwingUtilities.invokeLater(() -> {
+            user.attachGUI(this);
+            refresh();
+        });
     }
 
     /*

@@ -9,6 +9,8 @@
  * - opening UserView windows
  * - User group management
  * - Statistics display via Visitor
+ * 
+ * Design Pattern: Singleton, Composite, Visitor
  */
 
 import java.awt.*;
@@ -50,6 +52,8 @@ public class AdminControlPanel extends JFrame {
 
         // 3. Create the JTree
         tree = new JTree(treeModel);  
+        tree.setShowsRootHandles(true);   
+        tree.setRootVisible(true);
 
         // 4. Create the tree
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -222,11 +226,12 @@ public class AdminControlPanel extends JFrame {
         parentGroup.add(user);
         registry.put(id, user);
 
-        // add to tree
+        // Find the parent node in the tree
         DefaultMutableTreeNode parentNode = findTreeNode(parentGroup);
         if ( parentNode == null) {
             parentNode = rootNode;
         }
+        // Add the user node to the tree
         DefaultMutableTreeNode userNode = new DefaultMutableTreeNode(user);
         treeModel.insertNodeInto(userNode, parentNode, parentNode.getChildCount());
         tree.scrollPathToVisible(new javax.swing.tree.TreePath(userNode.getPath()));
@@ -269,6 +274,9 @@ public class AdminControlPanel extends JFrame {
 
         // 5. Insert the group node into the tree
         treeModel.insertNodeInto(groupNode, parentNode, parentNode.getChildCount());
+        treeModel.reload(parentNode);
+        tree.expandPath(new javax.swing.tree.TreePath(parentNode.getPath()));
+        tree.setSelectionPath(new javax.swing.tree.TreePath(groupNode.getPath()));
         tree.scrollPathToVisible(new javax.swing.tree.TreePath(groupNode.getPath()));
 
         groupIdField.setText("");

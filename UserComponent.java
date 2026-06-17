@@ -5,7 +5,12 @@
  * This abstract class is a abstract class for User (leaf) and UserGroup (composite). It uses 
  * the composite design pattern to allow for a hierarchical structure of users and 
  * user groups.
+ * 
+ * Design Pattern: Composite
  */
+
+import java.util.Collections;
+import java.util.List;
 
 public abstract class UserComponent {
     // Every user or group has an unique ID
@@ -46,8 +51,8 @@ public abstract class UserComponent {
      * This method is used to get the list of child components from the user or group.
      * Composite method: override to get the list of child components in UserGroup
      */
-    public java.util.List<UserComponent> getChildren() {
-        throw new UnsupportedOperationException("Leaf has no children");
+    public List<UserComponent> getChildren() {
+        return Collections.emptyList();
     }
 
     /* Method: accept

@@ -3,6 +3,8 @@
  * 6/15/2026
  * Class: StatsVisitor
  * This class is used to visit users and user groups and update the statistics.
+ * 
+ * Design Pattern: Visitor
  */
 
 import java.util.*;
