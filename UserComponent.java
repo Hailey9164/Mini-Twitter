@@ -18,11 +18,17 @@ public abstract class UserComponent {
 
     /* Method: userComponent
      * This method is used to initialize the unique ID of the user or group.
-     * Constructor to initialize the unique ID
+     * Constructor to initialize the unique ID and creation time
      */
     public UserComponent(String id) {
         this.id = id;
-    }   
+        this.creationTime = System.currentTimeMillis();
+    }
+
+    /* Method: getCreationTime
+     * This method is used to get the creation time of the user or group.
+     */
+    protected final long creationTime;
 
     /* Method: getId
      * This method is used to get the unique ID of the user or group.
@@ -53,6 +59,13 @@ public abstract class UserComponent {
      */
     public List<UserComponent> getChildren() {
         return Collections.emptyList();
+    }
+
+    /* Method: getCreationTime
+     * This method is used to get the creation time of the user or group.
+     */
+    public long getCreationTime() {
+        return creationTime;
     }
 
     /* Method: accept

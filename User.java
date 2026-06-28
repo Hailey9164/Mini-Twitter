@@ -24,12 +24,16 @@ public class User extends UserComponent implements Subject, Observer {
     // List of observers for the observer pattern
     private final List<Observer> observers = new ArrayList<>();
 
+    // Last update time for the user
+    private long lastUpdateTime;
+
     /* Method: User
      * This method is used to initialize the user with an ID using the parent class constructor.
      */
     public User(String id){
         super(id);
         this.id = id;
+        this.lastUpdateTime = System.currentTimeMillis();
     }
 
     /* Method: follow
@@ -39,14 +43,22 @@ public class User extends UserComponent implements Subject, Observer {
     public void follow(User targetUser) {
         followings.add(targetUser);
         targetUser.attach(this);
+
+        // Update the last update time when following a user
+        lastUpdateTime = System.currentTimeMillis();
+
+        // Notify GUI observers
+        notifyGUI();
     }
 
     /* Method: postTweet
      * This method is used to post a tweet to the user's news feed.
      * Notifies all observers of the new tweet.
+     * Updates the last update time.
      */
     public void postTweet(String message) {
         newsFeed.add(message);
+        lastUpdateTime = System.currentTimeMillis();
         notifyObservers(message);
     }
 
@@ -105,6 +117,7 @@ public class User extends UserComponent implements Subject, Observer {
     @Override
     public void update(Subject subject, Object arg) {
         newsFeed.add((String) arg);
+        lastUpdateTime = System.currentTimeMillis();
         notifyGUI();
     }
 
@@ -143,5 +156,12 @@ public class User extends UserComponent implements Subject, Observer {
     @Override
     public String toString() {
         return id;
+    }
+
+    /* Method: getLastUpdateTime
+     * This method is used to get the last update time of the user.
+     */
+    public long getLastUpdateTime() {
+        return lastUpdateTime;
     }
 }

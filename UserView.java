@@ -31,6 +31,10 @@ public class UserView extends JFrame implements Observer {
     private JButton followButton;
     private JButton postButton;
 
+    private JLabel creationTimeLabel;
+    private JLabel lastUpdateLabel;
+
+
     /*
      * Method: UserView
      * Constructor to initialize the user view.
@@ -58,6 +62,20 @@ public class UserView extends JFrame implements Observer {
     private void buildUI() {
         setLayout(new BorderLayout());
 
+        // Creation time label //
+        String formatted = new java.text.SimpleDateFormat("MM/dd/yyyy HH:mm:ss")
+                .format(new java.util.Date(user.getCreationTime()));
+        creationTimeLabel = new JLabel("Creation Time: " + formatted);
+
+        // Last update time label //
+        lastUpdateLabel = new JLabel("Last Update Time: " + user.getLastUpdateTime());
+
+        // Info panel for creation and last update time //
+        JPanel infoPanel = new JPanel();
+        infoPanel.setLayout(new BoxLayout(infoPanel, BoxLayout.Y_AXIS));
+        infoPanel.add(creationTimeLabel);
+        infoPanel.add(lastUpdateLabel);
+
         // Follow user // 
         JPanel followPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         followPanel.add(new JLabel("User ID:"));
@@ -65,7 +83,14 @@ public class UserView extends JFrame implements Observer {
         followPanel.add(followUserField);
         followButton = new JButton("Follow User");
         followPanel.add(followButton);
-        add(followPanel, BorderLayout.NORTH);
+
+        // Top panel for info and follow user //
+        JPanel topPanel = new JPanel();
+        topPanel.setLayout(new BoxLayout(topPanel, BoxLayout.Y_AXIS));
+        topPanel.add(infoPanel);
+        topPanel.add(followPanel);
+
+        add(topPanel, BorderLayout.NORTH);
 
         // Following list + news feed //
         JPanel centerPanel = new JPanel(new GridLayout(1, 2, 10, 0));
@@ -173,6 +198,10 @@ public class UserView extends JFrame implements Observer {
         for (String msg : user.getNewsFeed()) {
             feedModel.addElement(msg);
         }
+
+        // Update the creation time and last update time labels
+        creationTimeLabel.setText("Creation Time: " + formatTime(user.getCreationTime()));
+        lastUpdateLabel.setText("Last Update Time: " + formatTime(user.getLastUpdateTime()));
     }
 
     /*
@@ -182,5 +211,14 @@ public class UserView extends JFrame implements Observer {
     @Override
     public void update(Subject subject, Object arg) {
         refresh();
+    }
+
+    /*
+     * Method: formatTime
+     * Formats the given time in milliseconds to a readable date and time string.
+     */
+    private String formatTime(long time) {
+        return new java.text.SimpleDateFormat("MM/dd/yyyy HH:mm:ss")
+                .format(new java.util.Date(time));
     }
 }

@@ -93,6 +93,8 @@ public class AdminControlPanel extends JFrame {
     private JButton showGroupTotalButton;
     private JButton showMessagesTotalButton;
     private JButton showPositivePercentageButton;
+    private JButton showLastUpdatedUserButton;
+    private JButton verifyIDButton;
 
 
     /**
@@ -148,6 +150,18 @@ public class AdminControlPanel extends JFrame {
         openPanel.add(openUserViewButton);
         rightPanel.add(openPanel);
 
+        // Row: Verify ID button and find last updated user button
+        rightPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+        JPanel verifyPanel = new JPanel(new GridLayout(1, 2, 5, 5));
+        verifyPanel.setMaximumSize(new Dimension(300, 120));
+        verifyIDButton = new JButton("Verify IDs");
+        showLastUpdatedUserButton = new JButton("Find Last Updated User");
+        verifyPanel.add(verifyIDButton);
+        verifyPanel.add(showLastUpdatedUserButton);
+
+        rightPanel.add(verifyPanel);
+
+
         // Stats Buttons
         rightPanel.add(Box.createRigidArea(new Dimension(0, 10)));
         JPanel statsPanel = new JPanel(new GridLayout(2, 2, 5, 5));
@@ -202,6 +216,8 @@ public class AdminControlPanel extends JFrame {
         showGroupTotalButton.addActionListener(e -> onShowStats("group-total"));
         showMessagesTotalButton.addActionListener(e -> onShowStats("message-total"));
         showPositivePercentageButton.addActionListener(e -> onShowStats("positive-percent"));
+        verifyIDButton.addActionListener(e -> onVerifyIDs());
+        showLastUpdatedUserButton.addActionListener(e -> onShowLastUpdatedUser());
     }
 
     /*
@@ -397,5 +413,69 @@ public class AdminControlPanel extends JFrame {
      */
     private void openUserView(User user) {
         new UserView(user).setVisible(true);
+    }
+
+    /*
+     * Method: onVerifyIDs
+     * Verifies that all user and group IDs are unique and do not contain spaces.
+     */
+    private void onVerifyIDs() {
+        // Use a set to track seen IDs
+        Set<String> seen = new HashSet<>();
+        boolean hasDuplicate = false;
+        boolean hasSpace = false;
+
+        // Iterate through all user components in the registry
+        for (UserComponent comp : registry.values()) {
+            String id = comp.getId();
+
+            // Check for spaces
+            if (id.contains(" ")) {
+                hasSpace = true;
+            }
+
+            // Check for duplicates
+            if (!seen.add(id)) {
+                hasDuplicate = true;
+            }
+        }
+
+        // Build result message
+        if (!hasDuplicate && !hasSpace) {
+            JOptionPane.showMessageDialog(this, "All IDs are valid.");
+        } else {
+            StringBuilder sb = new StringBuilder("Invalid IDs found:\n");
+            if (hasDuplicate) sb.append("- Duplicate IDs detected\n");
+            if (hasSpace) sb.append("- IDs containing spaces detected\n");
+            JOptionPane.showMessageDialog(this, sb.toString());
+        }
+    }
+
+    /*
+     * Method: onShowLastUpdatedUser
+     * Finds and displays the last updated user.
+     */
+    private void onShowLastUpdatedUser() {
+        User latestUser = null;
+        long latestTime = -1;
+
+        // Loop through all components in the registry
+        for (UserComponent comp : registry.values()) {
+            if (comp instanceof User user) {
+                long t = user.getLastUpdateTime();
+                if (t > latestTime) {
+                    latestTime = t;
+                    latestUser = user;
+                }
+            }
+        }
+
+        // Show result
+        if (latestUser == null) {
+            JOptionPane.showMessageDialog(this, "No users found.");
+        } else {
+            JOptionPane.showMessageDialog(this,
+                "Last Updated User: " + latestUser.getId());
+        }
     }
 }
