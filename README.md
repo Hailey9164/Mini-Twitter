@@ -130,6 +130,32 @@ Instead of scattering counters across the codebase, the Visitor pattern centrali
 Only one Admin Control Panel should exist.
 The Singleton pattern prevents accidental duplicates.
 
+
+# Assignment 3 Updates
+This project was expanded with several new functional requirements that improve validation, tracking, and administrative insight. These enhancements build on the existing architecture and integrate smoothly with the Composite, Observer, Visitor, and Singleton patterns already in place.
+
+## ID Validation System
+A new button was added to the Admin Control Panel to verify the integrity of all User and Group IDs. When triggered, the system checks two conditions across the entire hierarchy:
+
+- All IDs must be unique
+- IDs must not contain spaces
+
+A dialog reports whether the system passes validation or if any issues were detected. This feature helps ensure data consistency without altering or blocking invalid input.
+
+## Creation Time Tracking
+Both Users and Groups now store a creationTime attribute, recorded at the moment the object is instantiated. This timestamp is displayed in each User View window, giving administrators and users visibility into when accounts and groups were created. The value is stored in the model layer and rendered in the GUI.
+
+## Last Update Time Tracking
+Users now maintain a lastUpdateTime attribute that updates whenever:
+
+- They post a tweet
+- They receive a tweet from someone they follow
+
+This allows the system to track the most recent activity across the entire user base. The timestamp is shown in the User View and updates dynamically as the user’s feed changes.
+
+## Find Last Updated User
+A new Admin Control Panel button identifies the user with the most recent update based on the lastUpdateTime attribute. When clicked, the system scans all users and displays the ID of the most recently active one. This provides a quick way to monitor engagement and activity trends within the network.
+
 ## Author
 Hailey Campbell  
 
